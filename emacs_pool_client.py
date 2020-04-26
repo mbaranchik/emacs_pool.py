@@ -5,13 +5,8 @@ import sys
 import os
 import subprocess
 
-# Create a UDS socket
-sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-
-server_address = os.environ['EMACS_POOL_SOCK'] if 'EMACS_POOL_SOCK' in os.environ \
-    else '{}/.emacs_pool.sock'.format(os.environ['HOME'])
-emacs_path = (os.environ['EMACS_POOL_EMACS_PATH'] + '/emacsclient') if 'EMACS_POOL_EMACS_PATH' in os.environ \
-    else '/usr/local/bin/emacsclient'
+server_address = os.environ['EMACS_POOL_SOCK']
+emacs_path = os.environ['EMACS_POOL_EMACS_PATH'] + '/emacsclient'
 
 if sys.argv[1] == "file":
     extra_cmd="-c"
@@ -23,6 +18,9 @@ else:
 
 # Connect the socket to the port where the server is listening
 print('INFO: Connecting to %s' % server_address)
+
+# Create a UDS socket
+sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 
 try:
     sock.connect(server_address)
