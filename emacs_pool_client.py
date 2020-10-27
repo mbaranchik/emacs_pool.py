@@ -28,11 +28,15 @@ except socket.error as e:
     print(str(e))
     sys.exit(1)
 
+params='new'
+if len(sys.argv) > 2:
+    params=' '.join(sys.argv[2:])
+
 try:
     print("INFO: Waiting for daemon name from server")
     data = sock.recv(256).decode()
     print('INFO: Received "{}"'.format(data))
-    cmd = "{} {} -s {} {}".format(emacs_path, extra_cmd, data, ' '.join(sys.argv[2:]))
+    cmd = "{} {} -s {} {}".format(emacs_path, extra_cmd, data, params)
     print("INFO: Executing : {}".format(cmd))
     proc = subprocess.run(cmd.split(' '))
 finally:
