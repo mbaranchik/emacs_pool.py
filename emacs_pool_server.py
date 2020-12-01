@@ -17,7 +17,9 @@ except ImportError:
 
 server_address = os.environ['EMACS_POOL_SOCK']
 emacs_path = os.environ['EMACS_POOL_EMACS_PATH'] + '/emacs'
+socket_dir = os.environ['EMACS_SOCKET_DIR'] if 'EMACS_SOCKET_DIR' in os.environ else '~/.emacs.d/server-sock'
 num_daemons = int(os.environ['EMACS_POOL_SIZE'])
+emacs_extra = os.environ['EMACS_POOL_EXTRA'] if 'EMACS_POOL_EXTRA' in os.environ else ''
 num_early_daemons = 1
 
 free_daemon_list = list()
@@ -34,8 +36,8 @@ class ClientThread(threading.Thread):
 
     def run(self):
         print("INFO: Connection from " + self.client_address)
-        print("INFO: Sending daemon name " + self.daemon.name)
-        self.client_socket.send(self.daemon.name.encode())
+        print("INFO: Sending daemon name {}".format(socket_dir, self.daemon.name))
+        self.client_socket.send(('{}/{}'.format(socket_dir, self.daemon.name)).encode())
         while not self.end.is_set():
             self.client_socket.settimeout(4)
             try:
@@ -94,7 +96,9 @@ class EmacsDaemon(object):
 
         # init daemon
         try:
-            self.proc = subprocess.Popen([emacs_path, '--fg-daemon={}'.format(self.name)], stdout=self.log, stderr=subprocess.STDOUT)
+            cmd = "{} --fg-daemon={}/{}".format(emacs_path, socket_dir, self.name)
+            print("New daemon: {}".format(cmd))
+            self.proc = subprocess.Popen(cmd.split(), stdout=self.log, stderr=subprocess.STDOUT)
             with open(self.log_name) as f:
                 while not 'Starting Emacs daemon' in f.read():
                     time.sleep(1)

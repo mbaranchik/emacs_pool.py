@@ -36,9 +36,9 @@ try:
     print("INFO: Waiting for daemon name from server")
     data = sock.recv(256).decode()
     print('INFO: Received "{}"'.format(data))
-    cmd = "{} {} -s {} {}".format(emacs_path, extra_cmd, data, params)
+    cmd = "{} {} --socket-name={} {}".format(emacs_path, extra_cmd, data, params)
     print("INFO: Executing : {}".format(cmd))
-    proc = subprocess.run(cmd.split(' '))
+    proc = subprocess.run(cmd.split())
 finally:
     print('INFO: Closing socket')
     sock.close()

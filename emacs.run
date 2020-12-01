@@ -18,6 +18,9 @@ export EMACS_POOL_SIZE=16
 # disable auto server-start
 export EMACS_START_SERVER="n"
 
+# export sockets dir
+export EMACS_SOCKET_DIR="/home/michaelba/.emacs.d/server-sock"
+
 if [[ "${OSTYPE}" == "darwin"* ]]; then
     IS_RUNNING="$(netstat -u | egrep "\\s${EMACS_POOL_SOCK}\$")"
 else
