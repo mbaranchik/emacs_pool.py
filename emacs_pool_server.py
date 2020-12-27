@@ -108,6 +108,7 @@ class EmacsDaemon(object):
 
     def kill(self):
         self.proc.kill()
+        self.proc.wait()
         try:
             os.remove(self.log_name)
         except:
