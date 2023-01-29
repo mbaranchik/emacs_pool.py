@@ -72,7 +72,9 @@ class PollThread(threading.Thread):
                         active_daemon_list.remove(daemon)
 
             # Fill free daemons
-            for idx in range(len(free_daemon_list) + len(active_daemon_list), num_daemons):
+            with daemon_list_lock:
+                free_list_num = len(free_daemon_list)
+            for idx in range(free_list_num, num_daemons):
                 if not self.end.is_set():
                     print("INFO: Spawning daemon periodically")
                     spawn_daemon()

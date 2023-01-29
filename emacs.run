@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # emacs-pool-daemon's unix domain socket path
 export EMACS_POOL_SOCK="$HOME/.emacs-pool.sock"
@@ -13,7 +13,7 @@ export EMACS_POOL_EMACS_PATH="/usr/local/bin/"
 export EMACS_POOL_EXTRA=""
 
 # set emacs-pool size
-export EMACS_POOL_SIZE=16
+export EMACS_POOL_SIZE=2
 
 # disable auto server-start
 export EMACS_START_SERVER="n"
@@ -40,8 +40,7 @@ fi
 if [ -z "${IS_RUNNING}" ]; then
     echo "Starting emacs_pool_server.py..."
     rm -f "${EMACS_POOL_SOCK}"
-    nohup emacs_pool_server.py &> ${EMACS_POOL_LOGFILE} &
-    sleep 3
+    nohup emacs_pool_server.py &
 fi
 
 if [[ $1 == "start" ]]; then
