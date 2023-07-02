@@ -9,10 +9,22 @@ import time
 server_address = os.environ['EMACS_POOL_SOCK']
 emacs_path = os.environ['EMACS_POOL_EMACS_PATH'] + '/emacsclient'
 
+params=['new']
+if len(sys.argv) > 2:
+    params=sys.argv[2:]
+
 if sys.argv[1] == "file":
-    extra_cmd="-c"
+    extra_cmd=["-c"]
+    extra_cmd.extend(params)
 elif sys.argv[1] == "nw":
-    extra_cmd="-t"
+    extra_cmd=["-t"]
+    extra_cmd.extend(params)
+elif sys.argv[1] == "everywhere":
+    extra_cmd=[
+        "-c",
+        "--eval",
+        "(emacs-everywhere)"
+    ]
 else:
     print("ERROR: Received bad command... usage: emacs_pool_client.py file|nw ARGS")
     sys.exit(1)
@@ -34,17 +46,17 @@ while True:
         if timeout < 0:
             sys.exit(1)
 
-params='new'
-if len(sys.argv) > 2:
-    params=' '.join(sys.argv[2:])
-
 try:
     print("INFO: Waiting for daemon name from server")
     data = sock.recv(256).decode()
     print('INFO: Received "{}"'.format(data))
-    cmd = "{} {} --socket-name={} {}".format(emacs_path, extra_cmd, data, params)
+    cmd = [
+        emacs_path,
+        f"--socket-name={data}"
+    ]
+    cmd.extend(extra_cmd)
     print("INFO: Executing : {}".format(cmd))
-    proc = subprocess.run(cmd, shell=True)
+    proc = subprocess.run(cmd)
 finally:
     print('INFO: Closing socket')
     sock.close()

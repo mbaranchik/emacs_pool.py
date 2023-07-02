@@ -20,6 +20,7 @@ emacs_path = os.environ['EMACS_POOL_EMACS_PATH'] + '/emacs'
 socket_dir = os.environ['EMACS_SOCKET_DIR'] if 'EMACS_SOCKET_DIR' in os.environ else '~/.emacs.d/server-sock'
 num_daemons = int(os.environ['EMACS_POOL_SIZE'])
 emacs_extra = os.environ['EMACS_POOL_EXTRA'] if 'EMACS_POOL_EXTRA' in os.environ else ''
+emacs_daemon_flags = os.envrion['EMACS_DAEMON_FLAGS'] if 'EMACS_DAEMON_FLAGS' in os.environ else ''
 num_early_daemons = 1
 
 free_daemon_list = list()
@@ -98,7 +99,7 @@ class EmacsDaemon(object):
 
         # init daemon
         try:
-            cmd = "{} --fg-daemon={}/{}".format(emacs_path, socket_dir, self.name)
+            cmd = "{} --fg-daemon={}/{} {}".format(emacs_path, socket_dir, self.name, emacs_daemon_flags)
             print("New daemon: {}".format(cmd))
             self.proc = subprocess.Popen(cmd.split(), stdout=self.log, stderr=subprocess.STDOUT)
             with open(self.log_name) as f:
