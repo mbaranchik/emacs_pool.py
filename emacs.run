@@ -1,25 +1,39 @@
 #!/usr/bin/env bash
 
 # emacs-pool-daemon's unix domain socket path
-export EMACS_POOL_SOCK="$HOME/.emacs-pool.sock"
+if [[ -z ${EMACS_POOL_SOCK} ]]; then
+    export EMACS_POOL_SOCK="$HOME/.emacs-pool.sock"
+fi
 
 # emacs-pool-daemon's log file path
-export EMACS_POOL_LOGFILE="$HOME/.emacs-pool.log"
+if [[ -z ${EMACS_POOL_LOGFILE} ]]; then
+    export EMACS_POOL_LOGFILE="$HOME/.emacs-pool.log"
+fi
 
 # set emacs path
-export EMACS_POOL_EMACS_PATH="/usr/local/bin/"
+if [[ -z ${EMACS_POOL_EMACS_PATH} ]]; then
+    export EMACS_POOL_EMACS_PATH="/usr/local/bin/"
+fi
 
 # set emacs extra args
-export EMACS_POOL_EXTRA=""
+if [[ -z ${EMACS_POOL_EXTRA} ]]; then
+    export EMACS_POOL_EXTRA=""
+fi
 
 # set emacs-pool size
-export EMACS_POOL_SIZE=2
+if [[ -z ${EMACS_POOL_SIZE} ]]; then
+    export EMACS_POOL_SIZE=2
+fi
 
 # disable auto server-start
-export EMACS_START_SERVER="n"
+if [[ -z ${EMACS_START_SERVER} ]]; then
+    export EMACS_START_SERVER="n"
+fi
 
 # export sockets dir
-export EMACS_SOCKET_DIR="$HOME/.emacs.d/server-sock"
+if [[ -z ${EMACS_SOCKET_DIR} ]]; then
+    export EMACS_SOCKET_DIR="$HOME/.emacs.d/server-sock"
+fi
 
 if [[ "${OSTYPE}" == "darwin"* ]]; then
     IS_RUNNING="$(netstat -u | egrep "\\s${EMACS_POOL_SOCK}\$")"
