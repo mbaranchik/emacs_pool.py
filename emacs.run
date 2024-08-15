@@ -12,7 +12,7 @@ fi
 
 # set emacs path
 if [[ -z ${EMACS_POOL_EMACS_PATH} ]]; then
-    export EMACS_POOL_EMACS_PATH="/usr/local/bin"
+    export EMACS_POOL_EMACS_PATH="$(dirname $(command -v emacs))"
 fi
 
 # set emacs extra args
