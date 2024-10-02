@@ -26,7 +26,7 @@ elif sys.argv[1] == "everywhere":
         "(emacs-everywhere)"
     ]
 elif sys.argv[1] == "auto":
-    extra_cmd="-c" if os.environ.get('DISPLAY', False) else "-t"
+    extra_cmd=["-c"] if os.environ.get('DISPLAY', False) else ["-t"]
     extra_cmd.extend(params)
 else:
     print("ERROR: Received bad command... usage: emacs_pool_client.py file|nw ARGS")
