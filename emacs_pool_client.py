@@ -19,6 +19,8 @@ if sys.argv[1] == "file":
 elif sys.argv[1] == "nw":
     extra_cmd=["-t"]
     extra_cmd.extend(params)
+    if os.environ.get('EMACS_TERM', ''):
+        os.environ['TERM'] = os.environ['EMACS_TERM']
 elif sys.argv[1] == "everywhere":
     extra_cmd=[
         "-c",
